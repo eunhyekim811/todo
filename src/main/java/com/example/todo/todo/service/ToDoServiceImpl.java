@@ -1,5 +1,6 @@
 package com.example.todo.todo.service;
 
+import com.example.todo.todo.dto.ToDoDto;
 import com.example.todo.todo.entity.ToDo;
 import com.example.todo.todo.repo.ToDoRepository;
 import lombok.RequiredArgsConstructor;
@@ -58,4 +59,16 @@ public class ToDoServiceImpl implements ToDoService{
     public List<ToDo> findToDoListByUserUidAndState(Long uid, Boolean state) {
         return repository.findToDoListByUserUidAndState(uid, state);
     }
+
+    @Override
+    public List<ToDoDto> findToDoListByUserUidAndStart(Long uid, LocalDate start) {
+        return repository.findToDoListByUserUidAndStart(uid, start);
+    }
+
+    @Override
+    public List<ToDoDto> findToDoListByUserUidAndFinish(Long uid, LocalDate finish) {
+        return repository.findToDoListByUserUidAndFinish(uid, finish);
+    }
+
+
 }

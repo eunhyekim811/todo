@@ -1,5 +1,6 @@
 package com.example.todo.todo.service;
 
+import com.example.todo.todo.dto.ToDoDto;
 import com.example.todo.todo.entity.ToDo;
 
 import java.time.LocalDate;
@@ -21,4 +22,7 @@ public interface ToDoService {
     void changeStatus(Long id);
 
     List<ToDo> findToDoListByUserUidAndState(Long uid, Boolean state);
+
+    List<ToDoDto> findToDoListByUserUidAndStart(Long uid, LocalDate start);
+    List<ToDoDto> findToDoListByUserUidAndFinish(Long uid, LocalDate finish);
 }

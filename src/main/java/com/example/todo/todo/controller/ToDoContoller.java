@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -117,4 +118,26 @@ public class ToDoContoller {
 //        return "redirect:/todo";
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("잘못된 요청");
     }
+
+    @PostMapping("/todo/start/{start}")
+    public ResponseEntity<?> startList(@PathVariable LocalDate start, HttpServletRequest request){
+        Optional<User> findUser=userService.findById(getSessionUser(request).getUid());
+        if(start!=null){
+            List<ToDoDto> list=toDoService.findToDoListByUserUidAndStart(findUser.get().getUid(), start);
+            return ResponseEntity.status(HttpStatus.OK).body(list);
+        }
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("잘못된 요청");
+    }
+
+    @PostMapping("todo/finish/{finish}")
+    public ResponseEntity<?> finishList(@PathVariable LocalDate finish, HttpServletRequest request){
+        Optional<User> findUser=userService.findById(getSessionUser(request).getUid());
+        if(finish!=null){
+            List<ToDoDto> list=toDoService.findToDoListByUserUidAndFinish(findUser.get().getUid(), finish);
+            return ResponseEntity.status(HttpStatus.OK).body(list);
+        }
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("잘못된 요청");
+    }
+
+
 }
