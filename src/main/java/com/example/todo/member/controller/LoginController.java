@@ -27,41 +27,42 @@ public class LoginController {
     private final UserService userService;
     private final LoginService loginService;
 
-    @GetMapping("/login")
+    @GetMapping("/loginform")
     public String loginForm(@ModelAttribute("loginDto") LoginDto loginDto, HttpServletRequest request){
         HttpSession session= request.getSession(false);
-        return session!=null && session.getAttribute("loginUser")!=null ? "redirect:/" : "/login/form";
-//        return "/form";
+        return session!=null && session.getAttribute("loginUser")!=null ? "redirect:/" : "login";
+//        return "login";
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<String> logout(HttpServletRequest request){
+//    public ResponseEntity<String> logout(HttpServletRequest request){
+    public String logout(HttpServletRequest request){
         HttpSession session= request.getSession(false);
         if(session!=null && session.getAttribute("loginUser")!=null)
             session.invalidate();
 
-//        return "redirect:/";
-        return ResponseEntity.status(HttpStatus.OK).body("로그아웃 완료");
+        return "redirect:/";
+//        return ResponseEntity.status(HttpStatus.OK).body("로그아웃 완료");
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@Validated @ModelAttribute LoginDto loginDto, BindingResult bindingResult,
-                        @RequestParam(defaultValue = "/todo") String redirectURL,
+//    public ResponseEntity<?> login(@Validated @ModelAttribute LoginDto loginDto, BindingResult bindingResult,
+    public String login(@Validated @ModelAttribute LoginDto loginDto, BindingResult bindingResult,
                         HttpServletRequest request){
 
         if(bindingResult.hasErrors()) {
-//            return "/login/form";
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body("입력값 오류");
+            return "login";
+//            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+//                    .body("입력값 오류");
         }
 
         Optional<User> loginUser=loginService.login(loginDto.getId(), loginDto.getPw());
 
         if(loginUser.isEmpty()){
             bindingResult.reject("loginFail", "id pw 에러");
-//            return "/login/form";
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body("로그인 실패");
+            return "login";
+//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+//                    .body("로그인 실패");
         }
 
 //        loginUser.ifPresent(user -> {
@@ -71,9 +72,8 @@ public class LoginController {
         HttpSession session=request.getSession();
         session.setAttribute("loginUser", loginUser.get());
 
-//        return "redirect:/todo";
-//        return "redirect:" + redirectURL;
-        return ResponseEntity.status(HttpStatus.OK)
-                .body("로그인 성공");
+        return "redirect:/todo";
+//        return ResponseEntity.status(HttpStatus.OK)
+//                .body("로그인 성공");
     }
 }

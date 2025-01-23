@@ -19,37 +19,37 @@ public class HomeController {
 
     private final UserService userService;
 
+    @GetMapping("/")
     public String home() {
-        return "/index";
+        return "home";
     }
 
-    @GetMapping("/join")
+    @GetMapping("/joinform")
     public String joinForm(@ModelAttribute UserDto userDto){
-        return "/user/join";
+        return "join";
     }
 
     @PostMapping("/join")
-    public ResponseEntity<?> join(@Validated @ModelAttribute UserDto userDto, BindingResult bindingResult){
+    public String join(@Validated @ModelAttribute UserDto userDto, BindingResult bindingResult){
         if(!userDto.getPw().equals(userDto.getCheckPw()))
             bindingResult.rejectValue("checkPassword", "", "비밀번호가 일치하지 않습니다.");
 
         if(bindingResult.hasErrors()) {
-//            return "/user/join";
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body("입력 데이터 오류");
+            return "join";
+//            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+//                    .body("입력 데이터 오류");
         }
 
         User user=new User(userDto.getId(), userDto.getPw(), userDto.getName());
         if(userService.save(user)==null){
             bindingResult.rejectValue("Id", "duplication", "이미 존재하는 ID입니다.");
-//            return "/user/join";
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body("중복 ID");
+            return "join";
+//            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+//                    .body("중복 ID");
         }
 
-//        return userService.save(user)!=null ? "redirect:/" : "/user/join";
-//        return "redirect:/";
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body("회원가입 완료");
+        return userService.save(user)!=null ? "redirect:/" : "join";
+//        return ResponseEntity.status(HttpStatus.CREATED)
+//                .body("회원가입 완료");
     }
 }

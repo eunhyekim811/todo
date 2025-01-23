@@ -11,10 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -74,7 +71,7 @@ public class ToDoContoller {
     }
 
     @PostMapping("/todo/add")
-    public ResponseEntity<String> addTodo(@ModelAttribute("toDoDto") ToDoDto toDoDto, HttpServletRequest request){
+    public String addTodo(@ModelAttribute("toDoDto") ToDoDto toDoDto, HttpServletRequest request){
 
         Optional<User> findUser=userService.findById(getSessionUser(request).getUid());
         Optional<ToDo> createToDo=findUser.map(user -> ToDo.createToDo(
@@ -82,41 +79,41 @@ public class ToDoContoller {
         ));
         createToDo.ifPresent(toDo -> toDoService.save(toDo));
 
-//        return "redirect:/todo";
-        return ResponseEntity.status(HttpStatus.CREATED).body("ToDo 추가 완료");
+        return "redirect:/todo";
+//        return ResponseEntity.status(HttpStatus.CREATED).body("ToDo 추가 완료");
     }
 
     @PostMapping("/todo/update/{id}")
-    public ResponseEntity<String> update(@PathVariable Long id, @ModelAttribute("toDoDto") ToDoDto toDoDto){
+    public String update(@PathVariable Long id, @ModelAttribute("toDoDto") ToDoDto toDoDto){
         if(id!=null){
             toDoService.update(id, toDoDto.getTitle(), toDoDto.getFinish());
-            return ResponseEntity.status(HttpStatus.OK).body("ToDo 수정 완료");
+//            return ResponseEntity.status(HttpStatus.OK).body("ToDo 수정 완료");
         }
 
-//        return "redirect:/todo";
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("잘못된 요청");
+        return "redirect:/todo";
+//        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("잘못된 요청");
     }
 
     @PostMapping("/todo/change/{id}")
-    public ResponseEntity<String> change(@PathVariable Long id){
+    public String change(@PathVariable Long id){
         if(id!=null){
             toDoService.changeStatus(id);
-            return ResponseEntity.status(HttpStatus.OK).body("ToDo 상태 변경 완료");
+//            return ResponseEntity.status(HttpStatus.OK).body("ToDo 상태 변경 완료");
         }
 
-//        return "redirect:/todo";
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("잘못된 요청");
+        return "redirect:/todo";
+//        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("잘못된 요청");
     }
 
     @PostMapping("/todo/delete/{id}")
-    public ResponseEntity<String> delete(@PathVariable Long id){
+    public String delete(@PathVariable Long id){
         if(id!=null){
             toDoService.findById(id).ifPresent(toDo -> toDoService.delete(toDo));
-            return ResponseEntity.status(HttpStatus.OK).body("ToDo 삭제 완료");
+//            return ResponseEntity.status(HttpStatus.OK).body("ToDo 삭제 완료");
         }
 
-//        return "redirect:/todo";
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("잘못된 요청");
+        return "redirect:/todo";
+//        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("잘못된 요청");
     }
 
     @PostMapping("/todo/start/{start}")

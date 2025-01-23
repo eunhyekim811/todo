@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ToDo 수정</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+<h2>할 일 수정</h2>
+
+<form th:action="@{'/todo/update/' + ${toDoDto.id}}" method="post" th:object="${toDoDto}">
+    <div>
+        <label for="title">제목</label>
+        <input type="text" id="title" name="title" th:field="*{title}" required>
+    </div>
+
+    <div>
+        <label for="finish">마감일</label>
+        <input type="date" id="finish" name="finish" th:field="*{finish}" required>
+    </div>
+
+    <button type="submit">수정 완료</button>
+</form>
+
+<a href="/todo">
+    <button>목록으로 돌아가기</button>
+</a>
+</body>
+</html>

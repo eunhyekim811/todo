@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ToDo 목록</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+<h2>ToDo 목록</h2>
+
+<h3>미완료 할 일</h3>
+<div th:if="${not #lists.isEmpty(toDoDtos)}">
+    <ul>
+        <li th:each="toDo : ${toDoDtos}">
+            <span th:text="${toDo.title}">할 일 제목</span>
+            <span th:text="${toDo.start}">시작일</span>
+            <span th:text="${toDo.finish}">마감일</span>
+            <form th:action="@{/todo/change/{id}(id=${toDo.id})}" method="post">
+                <button type="submit">상태 변경</button>
+            </form>
+            <form th:action="@{/todo/update/{id}(id=${toDo.id})}" method="get">
+                <button type="submit">수정</button>
+            </form>
+            <form th:action="@{/todo/delete/{id}(id=${toDo.id})}" method="post">
+                <button type="submit">삭제</button>
+            </form>
+        </li>
+    </ul>
+</div>
+<div th:if="${#lists.isEmpty(toDoDtos)}">
+    <p>미완료 할 일이 없습니다.</p>
+</div>
+
+<h3>완료된 할 일</h3>
+<div th:if="${not #lists.isEmpty(completedDtos)}">
+    <ul>
+        <li th:each="toDo : ${completedDtos}">
+            <span th:text="${toDo.title}">할 일 제목</span>
+            <span th:text="${toDo.start}">시작일</span>
+            <span th:text="${toDo.finish}">마감일</span>
+            <form th:action="@{/todo/change/{id}(id=${toDo.id})}" method="post">
+                <button type="submit">상태 변경</button>
+            </form>
+            <form th:action="@{/todo/update/{id}(id=${toDo.id})}" method="get">
+                <button type="submit">수정</button>
+            </form>
+            <form th:action="@{/todo/delete/{id}(id=${toDo.id})}" method="post">
+                <button type="submit">삭제</button>
+            </form>
+        </li>
+    </ul>
+</div>
+<div th:if="${#lists.isEmpty(completedDtos)}">
+    <p>완료된 할 일이 없습니다.</p>
+</div>
+
+<a href="/todo/add">
+    <button>새 할 일 추가</button>
+</a>
+
+<form th:action="@{/logout}" method="post">
+    <button type="submit">로그아웃</button>
+</form>
+
+</body>
+</html>
