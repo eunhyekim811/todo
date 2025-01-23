@@ -40,7 +40,7 @@ public class ToDoContoller {
     private List<ToDoDto> getToDoDtos(User loginUser, boolean state) {
         List<ToDo> list=toDoService.findToDoListByUserUidAndState(loginUser.getUid(), state);
         return list.stream().map(toDo ->
-                new ToDoDto(toDo.getId(), toDo.getTitle(), toDo.getState(), toDo.getStart(), toDo.getFinish()))
+                        new ToDoDto(toDo.getId(), toDo.getTitle(), toDo.getState(), toDo.getStart(), toDo.getFinish()))
                 .collect(Collectors.toList());
     }
 
@@ -115,26 +115,5 @@ public class ToDoContoller {
         return "redirect:/todo";
 //        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("잘못된 요청");
     }
-
-    @PostMapping("/todo/start/{start}")
-    public ResponseEntity<?> startList(@PathVariable LocalDate start, HttpServletRequest request){
-        Optional<User> findUser=userService.findById(getSessionUser(request).getUid());
-        if(start!=null){
-            List<ToDoDto> list=toDoService.findToDoListByUserUidAndStart(findUser.get().getUid(), start);
-            return ResponseEntity.status(HttpStatus.OK).body(list);
-        }
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("잘못된 요청");
-    }
-
-    @PostMapping("todo/finish/{finish}")
-    public ResponseEntity<?> finishList(@PathVariable LocalDate finish, HttpServletRequest request){
-        Optional<User> findUser=userService.findById(getSessionUser(request).getUid());
-        if(finish!=null){
-            List<ToDoDto> list=toDoService.findToDoListByUserUidAndFinish(findUser.get().getUid(), finish);
-            return ResponseEntity.status(HttpStatus.OK).body(list);
-        }
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("잘못된 요청");
-    }
-
 
 }
