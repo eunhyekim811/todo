@@ -12,7 +12,4 @@ public interface ToDoRepository extends JpaRepository<ToDo, Long> {
 //    List<ToDo> findToDoListByUidAndState(Long uid, boolean state);
     List<ToDo> findToDoListByUserUidAndState(Long uid, Boolean state);
 
-    List<ToDoDto> findToDoListByUserUidAndStart(Long uid, LocalDate start);
-
-    List<ToDoDto> findToDoListByUserUidAndFinish(Long uid, LocalDate finish);
 }
