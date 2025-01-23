@@ -48,7 +48,7 @@ public class HomeController {
 //                    .body("중복 ID");
         }
 
-        return userService.save(user)!=null ? "redirect:/" : "join";
+        return "redirect:/";
 //        return ResponseEntity.status(HttpStatus.CREATED)
 //                .body("회원가입 완료");
     }
